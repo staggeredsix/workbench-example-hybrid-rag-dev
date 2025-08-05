@@ -1,5 +1,5 @@
 # An Easy Button for Retrieval Augmented Generation (RAG) [![Open In AI Workbench](https://img.shields.io/badge/Open_In-AI_Workbench-76B900)](https://ngc.nvidia.com/open-ai-workbench/aHR0cHM6Ly9naXRodWIuY29tL05WSURJQS93b3JrYmVuY2gtZXhhbXBsZS1oeWJyaWQtcmFn)
-This chat application works interchangeably with build.nvidia.com API endpoints, downloadable NVIDIA NIM containers, and Hugging Face TGI on NVIDIA GPUs. It makes testing RAG with NVIDIA endpoints, self-hosted NIMs, and third party models simple. 
+This chat application runs entirely on local hardware using [Ollama](https://ollama.com) and the `llama3.1:8b-instruct-q8_0` model. It is designed for ARM64 systems and requires no external inference services.
 
 <!-- Banner Image -->
 <img src="https://developer-blogs.nvidia.com/wp-content/uploads/2024/07/rag-representation.jpg" width="100%">
@@ -18,10 +18,7 @@ This chat application works interchangeably with build.nvidia.com API endpoints,
 ## Project Overview
 This is an [NVIDIA AI Workbench](https://www.nvidia.com/en-us/deep-learning-ai/solutions/data-science/workbench/) project for developing a [Retrieval Augmented Generation](https://blogs.nvidia.com/blog/what-is-retrieval-augmented-generation/) application with a customizable Gradio Chat app. It lets you:
 * Embed your documents into a locally running vector database.
-* Run inference **locally** on a Hugging Face TGI server, in the **cloud** using NVIDIA inference endpoints, or using **microservices** via [NIMs](https://www.nvidia.com/en-us/ai/):
-    * 4-bit, 8-bit, and no quantization options are supported for locally running models served by TGI.
-    * Other models may be specified to run locally using their Hugging Face tag.
-    * Any downloadable NIM model can be used as a microservice, runnable via docker/podman compose in AI Workbench
+* Run inference **locally** through Ollama with the `llama3.1:8b-instruct-q8_0` model.
 
 ### Table 1 Default Supported Models by Inference Mode
 
