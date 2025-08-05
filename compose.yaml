@@ -2,19 +2,16 @@
 # https://docs.docker.com/reference/compose-file/
 services:
   ollama:
-    image: ollama/ollama:0.10.1
+    image: ollama/ollama:latest
+    platform: linux/arm64
     ports:
       - "11434:11434"
     volumes:
-      - ollama:/root/.ollama
-    command:
-      - /bin/sh
-      - -c
-      - ollama serve & sleep 5 && ollama pull llama3.1:8b-instruct-q8_0 && wait
-
+      - type: bind
+        source: /tmp/ollama
+        target: /root/.ollama
+    command: serve
+      
 networks:
   default:
-    name: agentic-rag
-
-volumes:
-  ollama:
+    name: hybrid-rag
