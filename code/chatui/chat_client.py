@@ -55,19 +55,19 @@ class ChatClient:
             )
 
     def predict(
-        self, 
-        query: str, 
-        mode: str, 
+        self,
+        query: str,
+        mode: str,
         local_model_id: str,
-        nvcf_model_id: str, 
+        nvcf_model_id: str,
         nim_model_ip: str,
-        nim_model_port: str, 
+        nim_model_port: str,
         nim_model_id: str,
         temp_slider: float,
         top_p_slider: float,
         freq_pen_slider: float,
         pres_pen_slider: float,
-        use_knowledge_base: bool, 
+        use_knowledge_base: bool,
         num_tokens: int
     ) -> typing.Generator[str, None, None]:
         """Make a model prediction."""
@@ -76,12 +76,6 @@ class ChatClient:
             "context": "",
             "use_knowledge_base": use_knowledge_base,
             "num_tokens": num_tokens,
-            "inference_mode": mode,
-            "local_model_id": local_model_id,
-            "nvcf_model_id": nvcf_model_id,
-            "nim_model_ip": nim_model_ip,
-            "nim_model_port": nim_model_port, 
-            "nim_model_id": nim_model_id,
             "temp": temp_slider,
             "top_p": top_p_slider,
             "freq_pen": freq_pen_slider,

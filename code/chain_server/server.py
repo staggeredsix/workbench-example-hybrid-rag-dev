@@ -33,7 +33,7 @@ app = FastAPI()
 # prestage the embedding model
 _ = chains.get_embedding_model()
 # set the global service context for Llama Index
-chains.set_service_context("local", "playground_mistral_7b", "10.123.45.678", 256, 0.7, 1.0, 0.0)
+chains.set_service_context()
 
 
 class Prompt(BaseModel):
@@ -43,16 +43,13 @@ class Prompt(BaseModel):
     context: str
     use_knowledge_base: bool = True
     num_tokens: int = 50
-    inference_mode: str
-    local_model_id: str
-    nvcf_model_id: str
-    nim_model_ip: str
-    nim_model_port: str 
-    nim_model_id: str
-    temp: float
-    top_p: float
-    freq_pen: float
-    pres_pen: float
+    temp: float = 0.2
+    top_p: float = 0.7
+    freq_pen: float = 0.0
+    pres_pen: float = 0.0
+
+    class Config:
+        extra = "ignore"
 
 
 class DocumentSearch(BaseModel):
@@ -97,34 +94,26 @@ async def generate_answer(prompt: Prompt) -> StreamingResponse:
     """Generate and stream the response to the provided prompt."""
     
     if prompt.use_knowledge_base:
-        generator = chains.rag_chain_streaming(prompt.question, 
-                                               prompt.num_tokens, 
-                                               prompt.inference_mode, 
-                                               prompt.local_model_id,
-                                               prompt.nvcf_model_id,
-                                               prompt.nim_model_ip,
-                                               prompt.nim_model_port, 
-                                               prompt.nim_model_id,
-                                               prompt.temp,
-                                               prompt.top_p,
-                                               prompt.freq_pen,
-                                               prompt.pres_pen)
-        return StreamingResponse(generator, media_type="text/event-stream")  
+        generator = chains.rag_chain_streaming(
+            prompt.question,
+            prompt.num_tokens,
+            prompt.temp,
+            prompt.top_p,
+            prompt.freq_pen,
+            prompt.pres_pen,
+        )
+        return StreamingResponse(generator, media_type="text/event-stream")
 
-    generator = chains.llm_chain_streaming(prompt.context, 
-                                           prompt.question, 
-                                           prompt.num_tokens, 
-                                           prompt.inference_mode, 
-                                           prompt.local_model_id,
-                                           prompt.nvcf_model_id,
-                                           prompt.nim_model_ip,
-                                           prompt.nim_model_port,
-                                           prompt.nim_model_id,
-                                           prompt.temp,
-                                           prompt.top_p,
-                                           prompt.freq_pen,
-                                           prompt.pres_pen)
-    return StreamingResponse(generator, media_type="text/event-stream")    
+    generator = chains.llm_chain_streaming(
+        prompt.context,
+        prompt.question,
+        prompt.num_tokens,
+        prompt.temp,
+        prompt.top_p,
+        prompt.freq_pen,
+        prompt.pres_pen,
+    )
+    return StreamingResponse(generator, media_type="text/event-stream")
 
 
 @app.post("/documentSearch")
